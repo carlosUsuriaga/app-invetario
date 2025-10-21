@@ -6,6 +6,8 @@ import lombok.*;
 import org.springframework.data.annotation.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -34,6 +36,8 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "id_unidad_medida", nullable = false)
     private UnidadMedida unidadMedida;
+
+    private LocalDate fechaVencimiento;
 
     private Integer stockActual = 0;
 
