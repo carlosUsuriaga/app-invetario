@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
+    <link rel="stylesheet" th:href="@{/Producto/productoDF.css}">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <a th:href="@{/dashboard}" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Volver
+        </a>
+        <div class="header-content">
+            <h1 class="title">Agregar Producto</h1>
+            <p class="subtitle">Complete los datos para registrar un nuevo producto en el inventario</p>
+        </div>
+    </div>
+    <div class="card">
+        <form th:action="@{/producto/agregar}" method="post" th:object="${producto}" class="form">
+
+            <div class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+                Información General
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nombre" class="form-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        Nombre
+                    </label>
+                    <input type="text" id="nombre" th:field="*{nombre}" class="form-input" placeholder="Ej: Gaseosa Inka Cola" />
+                    <span class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria" class="form-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path>
+                        </svg>
+                        Categoría
+                    </label>
+                    <select id="categoria" th:field="*{categoria}" class="form-select">
+                        <option value="">Selecciona una categoría</option>
+                        <option th:each="c : ${categorias}" th:value="${c.idCategoria}" th:text="${c.nombre}"></option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="descripcion" class="form-label">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    Descripción
+                </label>
+                <textarea id="descripcion" th:field="*{descripcion}" class="form-input" rows="3" placeholder="Descripción del producto..."></textarea>
+                <span class="error" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+            </div>
+
+            <div class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                Inventario y Stock
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="unidadMedida" class="form-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 7h16M4 12h16M4 17h16"/>
+                        </svg>
+                        Unidad de Medida
+                    </label>
+                    <select id="unidadMedida" th:field="*{unidadMedida}" class="form-select">
+                        <option value="">Selecciona Unidad de Medida</option>
+                        <option th:each="u : ${unidadMedidas}" th:value="${u.id}" th:text="${u.nombre}"></option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('unidadMedida')}" th:errors="*{unidadMedida}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="stockActual" class="form-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="8.5" cy="7" r="4"></circle>
+                            <polyline points="17 11 19 13 23 9"></polyline>
+                        </svg>
+                        Stock Actual
+                    </label>
+                    <input type="number" id="stockActual" th:field="*{stockActual}" class="form-input" placeholder="0" min="0" />
+                    <span class="error" th:if="${#fields.hasErrors('stockActual')}" th:errors="*{stockActual}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="stockMinimo" class="form-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        Stock Mínimo
+                    </label>
+                    <input type="number" id="stockMinimo" th:field="*{stockMinimo}" class="form-input" placeholder="0" min="0" />
+                    <span class="error" th:if="${#fields.hasErrors('stockMinimo')}" th:errors="*{stockMinimo}"></span>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"></line>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                Precio y Vencimiento
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="precioUnitario" class="form-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                        Precio Unitario
+                    </label>
+                    <div class="input-group">
+                        <span class="input-prefix">S/</span>
+                        <input type="number" id="precioUnitario" th:field="*{precioUnitario}" class="form-input input-with-prefix" placeholder="0.00" step="0.01" min="0" />
+                    </div>
+                    <span class="error" th:if="${#fields.hasErrors('precioUnitario')}" th:errors="*{precioUnitario}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaVencimiento" class="form-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Fecha de Vencimiento
+                    </label>
+                    <input type="date" id="fechaVencimiento" th:field="*{fechaVencimiento}" class="form-input" required />
+                    <span class="error" th:if="${#fields.hasErrors('fechaVencimiento')}" th:errors="*{fechaVencimiento}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="estado" class="form-label">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Estado
+                    </label>
+                    <select id="estado" th:field="*{estado}" class="form-select">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a th:href="@{/producto/lista}" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                    Cancelar
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Guardar Producto
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Info Box -->
+    <div class="info-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <div>
+            <strong>Consejos para el registro:</strong>
+            <p>El stock mínimo es la cantidad de alerta. Cuando el stock actual sea menor o igual, el sistema te notificará para reponer el producto.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

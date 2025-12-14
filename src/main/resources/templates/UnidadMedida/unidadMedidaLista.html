@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidades de Medida</title>
+    <link rel="stylesheet" th:href="@{/UnidadMedida/listadiseño.css}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header1">
+        <a th:href="@{/dashboard}" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Volver
+        </a>
+    </div>
+    <div class="header">
+        <h1 class="title">Unidades de Medida</h1>
+        <p class="subtitle">Gestión de unidades de medida del inventario</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-box">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="buscar" class="search-input" placeholder="Buscar por nombre o abreviatura...">
+        </div>
+        <button class="btn-add" onclick="window.location.href='/unidadmedida/agregar'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nueva Unidad
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Abreviatura</th>
+                <th>Estado</th>
+                <th>Fecha de Registro</th>
+                <th>Fecha de Actualización</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tabla-body">
+            <tr th:each="unidad : ${listaUM}"
+                th:data-estado="${unidad.estado}">
+                <td th:text="${unidad.id}" class="td-id"></td>
+                <td th:text="${unidad.nombre}" class="td-nombre"></td>
+                <td>
+                    <span class="badge-abrev" th:text="${unidad.abreviatura}"></span>
+                </td>
+                <td>
+                        <span th:class="${unidad.estado ? 'badge badge-active' : 'badge badge-inactive'}"
+                              th:text="${unidad.estado ? 'Activo' : 'Inactivo'}"></span>
+                </td>
+                <td th:text="${unidad.fechaRegistro}"></td>
+                <td th:text="${unidad.fechaActualizacion}"></td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn-editar">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Editar
+                        </button>
+                        <a th:href="@{/unidadmedida/anular/{id}(id=${unidad.id})}"
+                           class="btn-anular"
+                           onclick="return confirm('¿Anular esta unidad de medida?')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Anular
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+ </div>
+
+<!-- Modal para Editar -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Unidad de Medida</h2>
+            <button type="button" class="btn-close" onclick="cerrarModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <form th:action="@{/unidadmedida/editar}" method="post" th:object="${unidadMedida}" class="modal-form">
+            <input type="hidden" id="editId" th:field="*{id}">
+
+            <div class="form-group">
+                <label for="editNombre">Nombre</label>
+                <input type="text" id="editNombre" th:field="*{nombre}" class="form-input">
+                <span class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="editAbreviatura">Abreviatura</label>
+                <input type="text" id="editAbreviatura" th:field="*{abreviatura}" class="form-input">
+                <span class="error" th:if="${#fields.hasErrors('abreviatura')}" th:errors="*{abreviatura}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="editEstado">Estado</label>
+                <select id="editEstado" th:field="*{estado}" class="form-select">
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-save">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    var modalAbierto = [[${modalAbierto}]];
+    if (modalAbierto) {
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+</script>
+
+<script th:src="@{/UnidadMedida/buscador.js}"></script>
+</body>
+</html>

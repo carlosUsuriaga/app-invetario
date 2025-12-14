@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes</title>
+  <link rel="stylesheet" th:href="@{/Reporte/reportes-vista.css}">
+</head>
+<body>
+<div class="reportes-container">
+  <!-- Header -->
+  <div class="reportes-header">
+    <div class="header-top">
+      <a th:href="@{/dashboard}" class="back-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Volver
+      </a>
+    </div>
+
+    <h1>📊 Reportes</h1>
+    <p>Visualiza todos los reportes del sistema</p>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros-section">
+    <div class="filtros-grid">
+      <div class="filtro-grupo">
+        <label>Tipo de Reporte</label>
+        <select id="filtroTipo" onchange="cambiarReporte()">
+          <option value="resumen">📈 Resumen General</option>
+          <option value="inventario">📦 Inventario Completo</option>
+          <option value="stock-bajo">⚠️ Stock Bajo</option>
+          <option value="proximos-vencer">⏰ Próximos a Vencer</option>
+          <option value="vencidos">🔴 Vencidos</option>
+          <option value="sin-movimiento">📦 Sin Movimiento</option>
+          <option value="movimientos">🔄 Movimientos</option>
+          <option value="alertas">🔔 Alertas</option>
+        </select>
+      </div>
+
+      <div class="filtro-grupo">
+        <label>Acciones</label>
+        <div class="botones-accion">
+          <button class="btn-imprimir" onclick="imprimirReporte()">🖨️ Imprimir</button>
+          <button class="btn-descargar" onclick="descargarReporte()">📥 Descargar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenedor de Reporte -->
+  <div class="reporte-container">
+    <div id="resumenReporte" class="reporte-content">
+      <div class="loading">Cargando reporte...</div>
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/Reporte/reportes-vista.js}"></script>
+</body>
+</html>

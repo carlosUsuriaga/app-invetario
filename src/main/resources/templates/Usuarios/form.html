@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Usuarios</title>
+  <link rel="stylesheet" th:href="@{/Usuarios/usuarios.css}">
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1 class="title">👤 Gestión de Usuarios</h1>
+    <p class="subtitle">Administra los usuarios del sistema</p>
+  </div>
+
+  <!-- Formulario para Agregar/Editar -->
+  <div class="form-card">
+    <h2 class="form-title">Datos del Usuario</h2>
+    <form th:action="@{/usuarios/guardar}" method="post" th:object="${usuario}" class="user-form">
+      <input type="hidden" th:field="*{idUsuario}">
+
+      <div class="form-group">
+        <label class="form-label">Nombre</label>
+        <input th:field="*{nombre}" id="nombre" class="form-input">
+        <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="error-message"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Apellido</label>
+        <input th:field="*{apellido}" id="apellido" class="form-input">
+        <span th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}" class="error-message"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Teléfono</label>
+        <input th:field="*{telefono}" id="telefono" class="form-input">
+        <span th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" class="error-message"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input th:field="*{username}" id="username" class="form-input">
+        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-message"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" th:field="*{password}" id="password" class="form-input" placeholder="Dejar vacío para mantener actual">
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Rol</label>
+        <select th:field="*{rol}" id="rol" class="form-select">
+          <option value="">Selecciona un rol</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="USER">Usuario</option>
+        </select>
+        <span th:if="${#fields.hasErrors('rol')}" th:errors="*{rol}" class="error-message"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Estado</label>
+        <select th:field="*{estado}" id="estado" class="form-select">
+          <option value="true">Activo</option>
+          <option value="false">Inactivo</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" id="btnSubmit" class="btn btn-primary">
+          <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          Guardar
+        </button>
+        <button type="button" onclick="limpiarFormulario()" class="btn btn-secondary">
+          <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Tabla de Usuarios -->
+  <div class="table-card">
+    <div class="table-header">
+      <h2 class="table-title">Lista de Usuarios</h2>
+      <span class="table-count" th:text="${usuarios.size()} + ' usuarios registrados'"></span>
+    </div>
+
+    <div class="table-container">
+      <table class="table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre Completo</th>
+          <th>Teléfono</th>
+          <th>Username</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Fecha Registro</th>
+          <th>Última Act.</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${usuarios}" class="table-row">
+          <td class="td-id" th:text="${u.idUsuario}"></td>
+          <td class="td-nombre">
+            <div class="user-info">
+              <span class="user-name" th:text="${u.nombre + ' ' + u.apellido}"></span>
+            </div>
+          </td>
+          <td th:text="${u.telefono}"></td>
+          <td>
+            <span class="badge-username" th:text="${u.username}"></span>
+          </td>
+          <td>
+              <span th:class="${u.rol == 'ADMIN' ? 'badge badge-admin' : 'badge badge-user'}"
+                    th:text="${u.rol == 'ADMIN' ? 'Administrador' : 'Usuario'}"></span>
+          </td>
+          <td>
+              <span th:class="${u.estado ? 'badge badge-active' : 'badge badge-inactive'}"
+                    th:text="${u.estado ? 'Activo' : 'Inactivo'}"></span>
+          </td>
+          <td class="td-date" th:text="${#temporals.format(u.fechaRegistro, 'dd/MM/yyyy')}"></td>
+          <td class="td-date" th:text="${#temporals.format(u.fechaActualizacion, 'dd/MM/yyyy')}"></td>
+          <td>
+            <div class="action-buttons">
+              <button type="button"
+                      class="btn-action btn-edit"
+                      th:data-id="${u.idUsuario}"
+                      th:data-nombre="${u.nombre}"
+                      th:data-apellido="${u.apellido}"
+                      th:data-telefono="${u.telefono}"
+                      th:data-username="${u.username}"
+                      th:data-rol="${u.rol}"
+                      th:data-estado="${u.estado}">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+                Editar
+              </button>
+              <a th:href="@{/usuarios/anular/{id}(id=${u.idUsuario})}"
+                 th:class="${u.estado ? 'btn-action btn-deactivate' : 'btn-action btn-activate'}"
+                 onclick="return confirm('¿Cambiar estado de este usuario?')">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 6L6 18M6 6l12 12" th:if="${u.estado}"></path>
+                  <path d="M9 12l2 2 4-4" th:unless="${u.estado}"></path>
+                  <circle cx="12" cy="12" r="10" th:unless="${u.estado}"></circle>
+                </svg>
+                [[${u.estado ? 'Desactivar' : 'Activar'}]]
+              </a>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Event listener para todos los botones de editar
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-edit').forEach(btn => {
+      btn.addEventListener('click', function() {
+        cargarDatos(
+          this.dataset.id,
+          this.dataset.nombre,
+          this.dataset.apellido,
+          this.dataset.telefono,
+          this.dataset.username,
+          this.dataset.rol,
+          this.dataset.estado === 'true'
+        );
+      });
+    });
+  });
+
+  function cargarDatos(id, nombre, apellido, telefono, username, rol, estado) {
+    document.querySelector('input[name="idUsuario"]').value = id;
+    document.getElementById('nombre').value = nombre;
+    document.getElementById('apellido').value = apellido;
+    document.getElementById('telefono').value = telefono;
+    document.getElementById('username').value = username;
+    document.getElementById('rol').value = rol;
+    document.getElementById('estado').value = estado ? 'true' : 'false';
+    document.getElementById('password').value = '';
+    document.getElementById('btnSubmit').innerHTML = '<svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Actualizar';
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function limpiarFormulario() {
+    document.querySelector('input[name="idUsuario"]').value = '';
+    document.getElementById('nombre').value = '';
+    document.getElementById('apellido').value = '';
+    document.getElementById('telefono').value = '';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('rol').value = '';
+    document.getElementById('estado').value = 'true';
+    document.getElementById('btnSubmit').innerHTML = '<svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Guardar';
+  }
+</script>
+
+</body>
+</html>

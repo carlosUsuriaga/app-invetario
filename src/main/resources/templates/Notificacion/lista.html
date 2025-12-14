@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones - Inventario</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        .badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #45a049;
+        }
+
+        .btn-secondary {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #0b7dda;
+        }
+
+        .notificaciones-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .notificacion {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 5px solid #2196F3;
+            transition: all 0.3s ease;
+        }
+
+        .notificacion:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .notificacion.no-leida {
+            background: #f0f7ff;
+            border-left-color: #ff6b6b;
+        }
+
+        .notificacion.leida {
+            opacity: 0.7;
+            border-left-color: #ccc;
+        }
+
+        .notif-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .tipo-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .tipo-entrada {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .tipo-salida {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .tipo-stock {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tipo-vencimiento {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .notif-mensaje {
+            color: #333;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .notif-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .notif-acciones {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-leer {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-leer:hover {
+            background: #45a049;
+        }
+
+        .btn-eliminar {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-eliminar:hover {
+            background: #da190b;
+        }
+
+        .vacio {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 8px;
+            color: #999;
+        }
+
+        .vacio-icono {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            color: #1565c0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔔 Notificaciones</h1>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <span class="badge" th:text="'No leídas: ' + ${noLeidas}"></span>
+            <div class="acciones">
+                <a href="/notificaciones/marcar-todas-leidas" class="btn btn-secondary">✓ Marcar todas leídas</a>
+                <a href="/dashboard" class="btn btn-primary">← Volver</a>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${notificaciones.isEmpty()}">
+        <div class="vacio">
+            <div class="vacio-icono">📭</div>
+            <p>No hay notificaciones</p>
+        </div>
+    </div>
+
+    <div th:if="${!notificaciones.isEmpty()}">
+        <div class="info-box">
+            Total de notificaciones: <strong th:text="${total}"></strong>
+        </div>
+
+        <div class="notificaciones-list">
+            <div th:each="notif : ${notificaciones}" class="notificacion"
+                 th:classappend="${!notif.leido} ? 'no-leida' : 'leida'">
+
+                <div class="notif-header">
+                        <span class="tipo-badge"
+                              th:classappend="${'tipo-' + notif.tipo.name().toLowerCase()}"
+                              th:text="${notif.tipo.descripcion}"></span>
+                    <span th:if="${!notif.leido}" style="color: #ff6b6b; font-weight: bold;">● NUEVA</span>
+                </div>
+
+                <div class="notif-mensaje" th:text="${notif.mensaje}"></div>
+
+                <div class="notif-footer">
+                    <span th:text="${#temporals.format(notif.fechaRegistro, 'dd/MM/yyyy HH:mm')}"></span>
+                    <div class="notif-acciones">
+                        <a th:if="${!notif.leido}"
+                           th:href="'/notificaciones/marcar-leida/' + ${notif.idNotificacion}"
+                           class="btn-small btn-leer">✓ Leer</a>
+                        <a th:href="'/notificaciones/eliminar/' + ${notif.idNotificacion}"
+                           class="btn-small btn-eliminar"
+                           onclick="return confirm('¿Eliminar notificación?')">🗑 Eliminar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

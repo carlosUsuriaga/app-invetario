@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Inventario</title>
+    <link rel="stylesheet" th:href="@{/Dashboard/diseño.css}">
+    <link rel="stylesheet" th:href="@{/Dashboard/dashboard-reportes.css}">
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            </svg>
+            <span>Inventario</span>
+        </div>
+        <button class="toggle-btn" id="toggleBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <div class="section-title">Gestión</div>
+            <a th:href="@{/producto/lista}" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                </svg>
+                <span>Productos</span>
+            </a>
+            <a th:href="@{/proveedor/lista}" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Proveedores</span>
+            </a>
+            <a th:href="@{/categoria/lista}" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path>
+                </svg>
+                <span>Categorías</span>
+            </a>
+            <a th:href="@{/unidadmedida/lista}" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 7h16M4 12h16M4 17h16"/>
+                </svg>
+                <span>Unidades de Medida</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="section-title">Reportes y Análisis</div>
+            <a th:href="@{/reporte/ver}" class="nav-item nav-item-yellow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3v18h18"></path>
+                    <path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path>
+                </svg>
+                <span>Reportes</span>
+            </a>
+            <a th:href="@{/notificaciones/lista}" class="nav-item nav-item-yellow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span>Notificaciones</span>
+                <span class="badge-notification" th:if="${notificacionesCount > 0}" th:text="${notificacionesCount}"></span>
+            </a>
+            <a th:href="@{/movimientos/lista}" class="nav-item nav-item-yellow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                    <polyline points="17 6 23 6 23 12"></polyline>
+                </svg>
+                <span>Movimientos</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="section-title">Administración</div>
+            <a th:href="@{/usuarios/lista}" class="nav-item nav-item-purple">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Usuarios</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="sidebar-footer">
+        <a th:href="@{/logout}" class="nav-item nav-item-danger">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Cerrar Sesión</span>
+        </a>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-left">
+            <button class="bell-btn" id="bellBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="badge" id="badge" th:text="${notificacionesCount > 0 ? notificacionesCount : ''}"></span>
+            </button>
+
+            <div class="dropdown" id="dropdown">
+                <div class="dropdown-header">
+                    <h3>Notificaciones</h3>
+                    <button class="mark-all" id="markAll">Marcar todas</button>
+                </div>
+                <div class="dropdown-body" id="dropdownBody">
+                    <p class="empty">No hay notificaciones</p>
+                </div>
+                <div class="dropdown-footer">
+                    <a th:href="@{/notificaciones/lista}">Ver todas</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="navbar-right">
+            <span class="username" th:text="${usuario}">Usuario</span>
+            <img th:src="'https://ui-avatars.com/api/?name=' + ${usuario} + '&background=2563eb&color=fff'"
+                 alt="Avatar"
+                 class="avatar">
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <div class="page-header">
+            <h1>Restaurante Jhonny II</h1>
+            <p>Bienvenido al sistema de gestión de inventario</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card stat-card-blue">
+                <div class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3><a th:href="@{/producto/lista}">Total Productos</a></h3>
+                    <p class="stat-number" th:text="${totalProductos}">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-yellow">
+                <div class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3><a th:href="@{/reporte/ver}">Stock Bajo</a></h3>
+                    <p class="stat-number" th:text="${productosStockBajo}">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-green">
+                <div class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3><a th:href="@{/proveedor/lista}">Proveedores</a></h3>
+                    <p class="stat-number" th:text="${totalProveedores}">0</p>
+                </div>
+            </div>
+
+            <div class="stat-card stat-card-purple">
+                <div class="stat-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path>
+                    </svg>
+                </div>
+                <div class="stat-info">
+                    <h3><a th:href="@{/categoria/lista}">Categorías</a></h3>
+                    <p class="stat-number" th:text="${totalCategorias}">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Area - Con 3 Reportes Principales -->
+        <div class="charts-grid">
+            <!-- Reporte Resumen General -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>📈 Resumen General</h3>
+                    <a th:href="@{/reporte/ver}" class="ver-mas">Ver más →</a>
+                </div>
+                <div class="chart-content" id="resumenGeneral">
+                    <div class="loading">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- Reporte Stock Bajo -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>⚠️ Stock Bajo</h3>
+                    <a th:href="@{/reporte/ver}" class="ver-mas">Ver más →</a>
+                </div>
+                <div class="chart-content" id="stockBajo">
+                    <div class="loading">Cargando...</div>
+                </div>
+            </div>
+
+            <!-- Reporte Próximos a Vencer -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3>⏰ Próximos a Vencer</h3>
+                    <a th:href="@{/reporte/ver}" class="ver-mas">Ver más →</a>
+                </div>
+                <div class="chart-content" id="proximosVencer">
+                    <div class="loading">Cargando...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/Dashboard/sidebar-toggle.js}"></script>
+<script th:src="@{/Dashboard/dashboard.js}"></script>
+<script th:src="@{/Dashboard/dashboard-reportes.js}"></script>
+</body>
+</html>

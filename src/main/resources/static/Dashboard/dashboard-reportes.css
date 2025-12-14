@@ -1,0 +1,559 @@
+/* ========================================
+   DASHBOARD REPORTES - Diseño Minimalista
+   ======================================== */
+
+/* Grid de reportes - 3 columnas responsive */
+.dashboard-content .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+/* ========================================
+   CARDS DE REPORTES - Base
+   ======================================== */
+
+.dashboard-content .chart-card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.dashboard-content .chart-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   HEADER DE CARDS - Con colores diferenciados
+   ======================================== */
+
+.dashboard-content .chart-header {
+    padding: 1.75rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto de fondo sutil con gradiente */
+.dashboard-content .chart-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.03;
+    z-index: 0;
+}
+
+.dashboard-content .chart-header h3,
+.dashboard-content .chart-header .ver-mas {
+    position: relative;
+    z-index: 1;
+}
+
+/* Card 1: Resumen General - Azul Elegante */
+.dashboard-content .chart-card:nth-child(1) .chart-header {
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+    border-bottom-color: #667eea;
+}
+
+.dashboard-content .chart-card:nth-child(1) .chart-header::before {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dashboard-content .chart-card:nth-child(1) .chart-header h3 {
+    color: #1a1f36;
+    font-weight: 700;
+}
+
+.dashboard-content .chart-card:nth-child(1) .ver-mas {
+    color: #667eea;
+}
+
+/* Card 2: Stock Bajo - Amarillo/Naranja Advertencia */
+.dashboard-content .chart-card:nth-child(2) .chart-header {
+    background: linear-gradient(135deg, #fff8f0 0%, #fff3e6 100%);
+    border-bottom-color: #ff9800;
+}
+
+.dashboard-content .chart-card:nth-child(2) .chart-header::before {
+    background: linear-gradient(135deg, #ff9800 0%, #ff6f00 100%);
+}
+
+.dashboard-content .chart-card:nth-child(2) .chart-header h3 {
+    color: #1a1f36;
+    font-weight: 700;
+}
+
+.dashboard-content .chart-card:nth-child(2) .ver-mas {
+    color: #ff9800;
+}
+
+/* Card 3: Próximos a Vencer - Rojo Urgente */
+.dashboard-content .chart-card:nth-child(3) .chart-header {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffebee 100%);
+    border-bottom-color: #f44336;
+}
+
+.dashboard-content .chart-card:nth-child(3) .chart-header::before {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+}
+
+.dashboard-content .chart-card:nth-child(3) .chart-header h3 {
+    color: #1a1f36;
+    font-weight: 700;
+}
+
+.dashboard-content .chart-card:nth-child(3) .ver-mas {
+    color: #f44336;
+}
+
+/* Títulos de los headers */
+.dashboard-content .chart-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Enlaces "Ver más" */
+.dashboard-content .ver-mas {
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.dashboard-content .chart-card:nth-child(1) .ver-mas:hover {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateX(3px);
+}
+
+.dashboard-content .chart-card:nth-child(2) .ver-mas:hover {
+    background: rgba(255, 152, 0, 0.1);
+    transform: translateX(3px);
+}
+
+.dashboard-content .chart-card:nth-child(3) .ver-mas:hover {
+    background: rgba(244, 67, 54, 0.1);
+    transform: translateX(3px);
+}
+
+/* ========================================
+   CONTENIDO DE LAS CARDS
+   ======================================== */
+
+.dashboard-content .chart-content {
+    padding: 2rem;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: #ffffff;
+}
+
+/* ========================================
+   LOADING STATE - Mejorado
+   ======================================== */
+
+.dashboard-content .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    color: #94a3b8;
+    font-size: 0.95rem;
+    font-weight: 500;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dashboard-content .loading::after {
+    content: '';
+    width: 32px;
+    height: 32px;
+    border: 3px solid #f1f5f9;
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   STATS MINI - Diseño más limpio
+   ======================================== */
+
+.dashboard-content .stats-mini {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.dashboard-content .stat-mini {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 1.25rem;
+    border-radius: 12px;
+    border-left: 4px solid;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-content .stat-mini::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    opacity: 0.05;
+    transform: translate(30%, -30%);
+}
+
+.dashboard-content .stat-mini:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Colores por tipo */
+.dashboard-content .stat-mini {
+    border-left-color: #667eea;
+}
+
+.dashboard-content .stat-mini::before {
+    background: #667eea;
+}
+
+.dashboard-content .stat-mini.warning {
+    border-left-color: #ff9800;
+}
+
+.dashboard-content .stat-mini.warning::before {
+    background: #ff9800;
+}
+
+.dashboard-content .stat-mini.danger {
+    border-left-color: #f44336;
+}
+
+.dashboard-content .stat-mini.danger::before {
+    background: #f44336;
+}
+
+.dashboard-content .stat-mini.success {
+    border-left-color: #4caf50;
+}
+
+.dashboard-content .stat-mini.success::before {
+    background: #4caf50;
+}
+
+.dashboard-content .stat-mini-label {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dashboard-content .stat-mini-value {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.03em;
+}
+
+.dashboard-content .stat-mini .stat-mini-value {
+    color: #667eea;
+}
+
+.dashboard-content .stat-mini.warning .stat-mini-value {
+    color: #ff9800;
+}
+
+.dashboard-content .stat-mini.danger .stat-mini-value {
+    color: #f44336;
+}
+
+.dashboard-content .stat-mini.success .stat-mini-value {
+    color: #4caf50;
+}
+
+/* ========================================
+   LISTA DE PRODUCTOS MINI
+   ======================================== */
+
+.dashboard-content .productos-mini-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.dashboard-content .producto-mini-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dashboard-content .producto-mini-item:hover {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+    transform: translateX(4px);
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-content .producto-mini-nombre {
+    flex: 1;
+    font-size: 0.95rem;
+    color: #1e293b;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.dashboard-content .producto-mini-valor {
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    margin-left: 1rem;
+}
+
+.dashboard-content .producto-mini-stock {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dashboard-content .producto-mini-stock {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    color: #c62828;
+}
+
+.dashboard-content .producto-mini-stock.ok {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    color: #2e7d32;
+}
+
+.dashboard-content .producto-mini-stock.warning {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    color: #ef6c00;
+}
+
+/* ========================================
+   RECOMENDACIONES MINI
+   ======================================== */
+
+.dashboard-content .recomendaciones-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dashboard-content .recom-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    line-height: 1.6;
+    transition: all 0.3s ease;
+    border: 2px solid;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-content .recom-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+}
+
+.dashboard-content .recom-item {
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+.dashboard-content .recom-item::before {
+    background: #667eea;
+}
+
+.dashboard-content .recom-item.warning {
+    background: linear-gradient(135deg, #fff8f0 0%, #fff3e6 100%);
+    border-color: rgba(255, 152, 0, 0.2);
+}
+
+.dashboard-content .recom-item.warning::before {
+    background: #ff9800;
+}
+
+.dashboard-content .recom-item.danger {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffebee 100%);
+    border-color: rgba(244, 67, 54, 0.2);
+}
+
+.dashboard-content .recom-item.danger::before {
+    background: #f44336;
+}
+
+.dashboard-content .recom-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-content .recom-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.dashboard-content .recom-text {
+    flex: 1;
+    font-weight: 500;
+}
+
+.dashboard-content .recom-text strong {
+    font-weight: 700;
+    color: #667eea;
+}
+
+.dashboard-content .recom-item.warning .recom-text strong {
+    color: #ff9800;
+}
+
+.dashboard-content .recom-item.danger .recom-text strong {
+    color: #f44336;
+}
+
+/* ========================================
+   EMPTY STATE - Más elegante
+   ======================================== */
+
+.dashboard-content .empty-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.dashboard-content .empty-chart-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.3;
+    filter: grayscale(1);
+}
+
+.dashboard-content .empty-chart p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #64748b;
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 1400px) {
+    .dashboard-content .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-content .chart-card:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 1024px) {
+    .dashboard-content .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .dashboard-content .chart-card:nth-child(3) {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-content .charts-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .dashboard-content .chart-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+    .dashboard-content .ver-mas {
+        align-self: flex-end;
+    }
+
+    .dashboard-content .chart-content {
+        padding: 1.5rem;
+        min-height: 250px;
+    }
+
+    .dashboard-content .stats-mini {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-content .stat-mini-value {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-content .producto-mini-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .dashboard-content .producto-mini-valor,
+    .dashboard-content .producto-mini-stock {
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Categorías</title>
+    <link rel="stylesheet" th:href="@{/Categoria/categoriaDiseño.css}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header1">
+        <a th:href="@{/dashboard}" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Volver
+        </a>
+    </div>
+    <div class="header">
+        <h1 class="title">Categorías</h1>
+        <p class="subtitle">Gestión de categorías del inventario</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-box">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="buscar" class="search-input" placeholder="Buscar categoría...">
+        </div>
+        <button class="btn-add" onclick="window.location.href='/categoria/agregar'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nueva Categoría
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Fecha de Registro</th>
+                <th>Fecha de Actualización</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tabla-body">
+            <tr th:each="categoria : ${categorias}"
+                th:data-estado="${categoria.estado}">
+                <td th:text="${categoria.idCategoria}" class="td-id"></td>
+                <td th:text="${categoria.nombre}" class="td-nombre"></td>
+                <td th:text="${categoria.descripcion}"></td>
+                <td>
+                        <span th:class="${categoria.estado ? 'badge badge-active' : 'badge badge-inactive'}"
+                              th:text="${categoria.estado ? 'Activo' : 'Inactivo'}"></span>
+                </td>
+                <td th:text="${categoria.fechaRegistro}"></td>
+                <td th:text="${categoria.fechaActualizacion}"></td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn-editar">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Editar
+                        </button>
+                        <a th:href="@{/categoria/anular/{id}(id=${categoria.idCategoria})}"
+                           class="btn-anular"
+                           onclick="return confirm('¿Anular esta categoría?')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Anular
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para Editar -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Categoría</h2>
+            <button type="button" class="btn-close" onclick="cerrarModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <form th:action="@{/categoria/editar}" method="post" th:object="${categoria}" class="modal-form">
+            <input type="hidden" id="editId" th:field="*{idCategoria}">
+
+            <div class="form-group">
+                <label for="editNombre">Nombre</label>
+                <input type="text" id="editNombre" th:field="*{nombre}" class="form-input">
+                <span class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="editDescripcion">Descripción</label>
+                <textarea id="editDescripcion" th:field="*{descripcion}" class="form-input" rows="3"></textarea>
+                <span class="error" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="editEstado">Estado</label>
+                <select id="editEstado" th:field="*{estado}" class="form-select">
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-save">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    var modalAbierto = [[${modalAbierto}]];
+    if (modalAbierto) {
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+</script>
+<script th:src="@{/Categoria/buscador.js}"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" th:href="@{/Producto/diseñoLista.css}">
+</head>
+<body>
+
+<div class="container">
+        <div class="header1">
+            <a th:href="@{/dashboard}" class="back-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Volver
+            </a>
+        </div>
+    <div class="header">
+        <h1 class="title">Productos</h1>
+        <p class="subtitle">Gestión del inventario de productos</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-box">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="buscar" class="search-input" placeholder="Buscar producto...">
+        </div>
+        <button class="btn-add" onclick="window.location.href='/producto/agregar'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nuevo Producto
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Unidad</th>
+                <th>Stock Actual</th>
+                <th>Stock Mínimo</th>
+                <th>Precio</th>
+                <th>Vencimiento</th>
+                <th>Estado</th>
+                <th>Fecha Registro</th>
+                <th>Fecha Actualización</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tabla-body">
+            <tr th:each="p : ${productos}"
+                th:data-categoria-id="${p.categoria.idCategoria}"
+                th:data-unidad-id="${p.unidadMedida.id}"
+                th:data-fecha-vencimiento="${#temporals.format(p.fechaVencimiento, 'yyyy-MM-dd')}"
+                th:data-estado="${p.estado}">
+                <td th:text="${p.idProducto}" class="td-id"></td>
+                <td th:text="${p.nombre}" class="td-nombre"></td>
+                <td th:text="${p.descripcion}" class="td-descripcion"></td>
+                <td>
+                    <span class="badge-categoria" th:text="${p.categoria.nombre}"></span>
+                </td>
+                <td>
+                    <span class="badge-unidad" th:text="${p.unidadMedida.nombre}"></span>
+                </td>
+                <td>
+                        <span th:class="${p.stockActual <= p.stockMinimo ? 'stock-badge stock-low' : 'stock-badge stock-ok'}"
+                              th:text="${p.stockActual}"></span>
+                </td>
+                <td>
+                    <span class="stock-min" th:text="${p.stockMinimo}"></span>
+                </td>
+                <td>
+                    <span class="precio" th:text="'S/ ' + ${p.precioUnitario}"></span>
+                </td>
+                <td th:text="${p.fechaVencimiento}"></td>
+                <td>
+                        <span th:class="${p.estado ? 'badge badge-active' : 'badge badge-inactive'}"
+                              th:text="${p.estado ? 'Activo' : 'Inactivo'}"></span>
+                </td>
+                <td th:text="${p.fechaRegistro}"></td>
+                <td th:text="${p.fechaActualizacion}"></td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn-editar">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Editar
+                        </button>
+                        <a th:href="@{/producto/anular/{id}(id=${p.idProducto})}"
+                           class="btn-anular"
+                           onclick="return confirm('¿Anular este producto?')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Anular
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para Editar -->
+<div id="modal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Producto</h2>
+            <button type="button" class="btn-close" onclick="cerrarModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <form th:action="@{/producto/editar}" method="post" th:object="${producto}" class="modal-form">
+            <input type="hidden" th:field="*{idProducto}" id="editId">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editNombre">Nombre</label>
+                    <input type="text" th:field="*{nombre}" id="editNombre" class="form-input">
+                    <span class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="editCategoria">Categoría</label>
+                    <select th:field="*{categoria.idCategoria}" id="editCategoria" class="form-select">
+                        <option value="">Selecciona una categoría</option>
+                        <option th:each="c : ${categorias}" th:value="${c.idCategoria}" th:text="${c.nombre}"></option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('categoria')}" th:errors="*{categoria}"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="editDescripcion">Descripción</label>
+                <textarea th:field="*{descripcion}" id="editDescripcion" class="form-input" rows="2"></textarea>
+                <span class="error" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editUnidadMedida">Unidad de Medida</label>
+                    <select th:field="*{unidadMedida.id}" id="editUnidadMedida" class="form-select">
+                        <option value="">Selecciona Unidad de Medida</option>
+                        <option th:each="u : ${unidadMedidas}" th:value="${u.id}" th:text="${u.nombre}"></option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('unidadMedida')}" th:errors="*{unidadMedida}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="editStockActual">Stock Actual</label>
+                    <input type="number" th:field="*{stockActual}" id="editStockActual" class="form-input">
+                    <span class="error" th:if="${#fields.hasErrors('stockActual')}" th:errors="*{stockActual}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="editStockMinimo">Stock Mínimo</label>
+                    <input type="number" th:field="*{stockMinimo}" id="editStockMinimo" class="form-input">
+                    <span class="error" th:if="${#fields.hasErrors('stockMinimo')}" th:errors="*{stockMinimo}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editPrecioUnitario">Precio Unitario</label>
+                    <input type="number" th:field="*{precioUnitario}" id="editPrecioUnitario" class="form-input" step="0.01">
+                    <span class="error" th:if="${#fields.hasErrors('precioUnitario')}" th:errors="*{precioUnitario}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="editFechaVencimiento">Fecha de Vencimiento</label>
+                    <input type="date" th:field="*{fechaVencimiento}" id="editFechaVencimiento" class="form-input">
+                    <span class="error" th:if="${#fields.hasErrors('fechaVencimiento')}" th:errors="*{fechaVencimiento}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="editEstado">Estado</label>
+                    <select th:field="*{estado}" id="editEstado" class="form-select">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                    <span class="error" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-save">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    var modalAbierto = [[${modalAbierto}]];
+    if (modalAbierto) {
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+</script>
+
+<script th:src="@{/Producto/buscador.js}"></script>
+</body>
+</html>

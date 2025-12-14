@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/Notificacion/navbar.css}">
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-left">
+      <!-- Campana de notificaciones -->
+      <div class="notification-container">
+        <button class="bell-btn" id="bellBtn" title="Notificaciones">
+          🔔
+          <span class="badge" id="badge">0</span>
+        </button>
+
+        <!-- Dropdown de notificaciones -->
+        <div class="dropdown" id="dropdown">
+          <div class="dropdown-header">
+            <h3>Notificaciones</h3>
+            <button class="mark-all" id="markAll" title="Marcar todas como leídas">
+              ✓ Marcar todas
+            </button>
+          </div>
+
+          <div class="dropdown-body" id="dropdownBody">
+            <p class="empty">Cargando notificaciones...</p>
+          </div>
+
+          <div class="dropdown-footer">
+            <a href="/notificacion/ver-todas" class="ver-todas-link">
+              Ver todas las notificaciones →
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Perfil de usuario -->
+    <div class="navbar-right">
+      <img src="https://ui-avatars.com/api/?name=Jhonny+II&background=6366f1&color=fff"
+           alt="Avatar" class="avatar">
+      <span class="username">Jhonny II</span>
+    </div>
+  </div>
+</nav>
+
+<script th:src="@{/Notificacion/notificaciones.js}"></script>
+</body>
+</html>

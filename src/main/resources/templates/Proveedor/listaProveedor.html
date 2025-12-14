@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proveedores</title>
+    <link rel="stylesheet" th:href="@{/Proveedor/lista.css}">
+</head>
+<body>
+
+<div class="container">
+    <div class="header1">
+        <a th:href="@{/dashboard}" class="back-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            Volver
+        </a>
+    </div>
+
+    <div class="header">
+        <h1 class="title">Proveedores</h1>
+        <p class="subtitle">Gestión de proveedores del inventario</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-box">
+            <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <input type="text" id="buscar" class="search-input" placeholder="Buscar proveedor...">
+        </div>
+        <button class="btn-add" onclick="window.location.href='/proveedor/agregar'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nuevo Proveedor
+        </button>
+    </div>
+
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>RUC</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>Fecha de Registro</th>
+                <th>Fecha de Actualización</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody id="tabla-body">
+            <tr th:each="p : ${proveedores}"
+                th:data-estado="${p.estado}" >
+                <td th:text="${p.idProveedor}" class="td-id"></td>
+
+                <td th:text="${p.nombre}" class="td-nombre"></td>
+                <td>
+                    <span class="badge-ruc" th:text="${p.ruc}"></span>
+                </td>
+                <td>
+                    <a th:href="'tel:' + ${p.telefono}" class="contact-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        <span th:text="${p.telefono}"></span>
+                    </a>
+                </td>
+                <td>
+                    <a th:href="'mailto:' + ${p.correo}" class="contact-link">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        <span th:text="${p.correo}"></span>
+                    </a>
+                </td>
+                <td th:text="${p.direccion}" class="td-direccion"></td>
+                <td>
+                        <span th:class="${p.estado ? 'badge badge-active' : 'badge badge-inactive'}"
+                              th:text="${p.estado ? 'Activo' : 'Inactivo'}"></span>
+                </td>
+                <td th:text="${p.fechaRegistro}"></td>
+                <td th:text="${p.fechaActualizacion}"></td>
+                <td>
+                    <div class="action-buttons">
+                        <button class="btn-editar">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                            </svg>
+                            Editar
+                        </button>
+                        <a th:href="@{/proveedor/anular/{id}(id=${p.idProveedor})}"
+                           class="btn-anular"
+                           onclick="return confirm('¿Anular este proveedor?')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Anular
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para Editar -->
+<div id="modal" class="modal" style="display:none">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Proveedor</h2>
+            <button type="button" class="btn-close" onclick="cerrarModal()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <form th:action="@{/proveedor/editar}" method="post" th:object="${proveedor}" class="modal-form">
+            <input type="hidden" id="editId" th:field="*{idProveedor}">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editNombre">Nombre</label>
+                    <input type="text" id="editNombre" th:field="*{nombre}" class="form-input">
+                    <span class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="editRuc">RUC</label>
+                    <input type="text" id="editRuc" th:field="*{ruc}" class="form-input">
+                    <span class="error" th:if="${#fields.hasErrors('ruc')}" th:errors="*{ruc}"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="editTelefono">Teléfono</label>
+                    <input type="text" id="editTelefono" th:field="*{telefono}" class="form-input">
+                    <span class="error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="editCorreo">Correo</label>
+                    <input type="email" id="editCorreo" th:field="*{correo}" class="form-input">
+                    <span class="error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="editDireccion">Dirección</label>
+                <input type="text" id="editDireccion" th:field="*{direccion}" class="form-input">
+                <span class="error" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="editEstado">Estado</label>
+                <select id="editEstado" th:field="*{estado}" class="form-select">
+                    <option value="true">Activo</option>
+                    <option value="false">Inactivo</option>
+                </select>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-save">Guardar Cambios</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    var modalAbierto = [[${modalAbierto}]];
+    if (modalAbierto) {
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+</script>
+
+<script th:src="@{/Proveedor/buscador.js}"></script>
+</body>
+</html>
