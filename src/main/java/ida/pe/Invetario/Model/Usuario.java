@@ -24,8 +24,11 @@ public class Usuario {
 
     @NotBlank(message = "Campo apellido vacío!")
     private String apellido;
-
-    @Size(max = 20)
+    @Pattern(
+            regexp = "\\d{9}",
+            message = "El teléfono debe contener exactamente 9 dígitos numéricos"
+    )
+    @Column(length = 9)
     private String telefono;
 
     @NotBlank(message = "Ingrese un nombre de usuario!")

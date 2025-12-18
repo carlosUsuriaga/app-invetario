@@ -28,6 +28,11 @@ public class Proveedor {
     @Column(unique = true, length = 11)
     private String ruc;
 
+    @Pattern(
+            regexp = "\\d{9}",
+            message = "El teléfono debe contener exactamente 9 dígitos numéricos"
+    )
+    @Column(length = 9)
     private String telefono;
 
     @Email(message = "Correo electrónico inválido")

@@ -64,6 +64,34 @@ body {
     color: rgba(100, 100, 100, 0.9);
     font-weight: 500;
 }
+/* Header1 */
+.header1 {
+    margin-bottom: 2rem;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--white);
+    color: var(--gray-700);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.back-btn:hover {
+    background: var(--gray-50);
+    transform: translateX(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+
 
 /* ==================== FORM CARD ==================== */
 .form-card {
